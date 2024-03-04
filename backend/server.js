@@ -26,6 +26,7 @@ server.post("/files/new/:fileName", async (req, res) => {
         } else {
             console.log("File saved");
             res.status(200).json({
+                success: "true",
                 fileName
             });
         }

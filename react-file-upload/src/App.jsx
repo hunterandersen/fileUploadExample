@@ -26,7 +26,9 @@ function App() {
         method: "POST",
         headers: postHeaders
       })
-      .then((res) => console.log(res))
+      .then((res) => res.json())
+      .then(data => console.log(data))
+      .catch(console.error);
     }
 
   }
