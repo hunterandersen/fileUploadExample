@@ -18,13 +18,17 @@ function App() {
     e.preventDefault();
 
     if (files?.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("photo", files[i]);
+      }
+
       const postHeaders = new Headers();
-      postHeaders.append("Content-Type", "image/jpeg");
+      postHeaders.append("Content-Type", "multipart/form-data");
       
-      fetch(`http://localhost:5555/files/new/${files[0].name}`, {
-        body: files[0],
-        method: "POST",
-        headers: postHeaders
+      fetch(`http://localhost:5555/files/new/images`, {
+        body: formData,
+        method: "POST"
       })
       .then((res) => res.json())
       .then(data => console.log(data))
@@ -36,10 +40,8 @@ function App() {
   //Derived State -- Efficiency could be improved with a memo, or more robust update that clears previous ObjectURLs
   let fileArr = [];
   if (files.length > 0) {
-    let i = 0;
-    let tempFile;
-    while ((tempFile = files.item(i++))) {
-      fileArr.push(URL.createObjectURL(tempFile));
+    for (let i = 0; i < files.length; i++) {
+      fileArr.push(URL.createObjectURL(files[i]));
     }
   }
 
