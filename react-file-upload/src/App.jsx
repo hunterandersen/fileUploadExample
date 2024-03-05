@@ -10,6 +10,7 @@ function App() {
     if (e.target.files.length == 0 && files?.length > 0) {
       e.target.files = files;
     } else {
+      //The File Interface on MDN
       setFiles(e.target.files);
     }
   }
@@ -22,9 +23,6 @@ function App() {
       for (let i = 0; i < files.length; i++) {
         formData.append("photo", files[i]);
       }
-
-      const postHeaders = new Headers();
-      postHeaders.append("Content-Type", "multipart/form-data");
       
       fetch(`http://localhost:5555/files/new/images`, {
         body: formData,
@@ -41,6 +39,7 @@ function App() {
   let fileArr = [];
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
+      //These URLs should be released after they are no longer being used
       fileArr.push(URL.createObjectURL(files[i]));
     }
   }
