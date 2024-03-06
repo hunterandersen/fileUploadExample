@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { useObjectUrls } from "./customHooks/useObjectUrls";
 import "./App.css";
 
 function App() {
   //Will be of type FileList
   const [fileData, setFileData] = useState([]);
+  const getObjectURL = useObjectUrls();
 
   function handleFileUpload(e) {
     //Preserve the previous file selection if there was one
     if (e.target.files?.length > 0) {
-      setFileData(e.target.files);
+      setFileData(Array.from(e.target.files));
     }
   }
 
@@ -33,6 +35,7 @@ function App() {
   }
 
   //Derived State -- Efficiency could be improved with a memo, or more robust update that clears previous ObjectURLs
+  /*
   let fileArr = [];
   if (fileData.length > 0) {
     for (let i = 0; i < fileData.length; i++) {
@@ -40,6 +43,7 @@ function App() {
       fileArr.push(URL.createObjectURL(fileData[i]));
     }
   }
+  */
 
   return (
     <>
@@ -55,10 +59,10 @@ function App() {
         />
         <button type="submit">Submit Selected Files</button>
         <ul className="fileList">
-          {fileArr.map((file, index) => {
+          {fileData.map((file, index) => {
             return (
               <li key={index}>
-                <img src={file} alt={fileData[index].name} />
+                <img src={getObjectURL(file)} alt={fileData[index].name} />
               </li>
             );
           })}
