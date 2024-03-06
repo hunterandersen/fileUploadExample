@@ -53,6 +53,9 @@ server.post("/files/new/images", upload.array("photo"), async (req, res) => {
     
 });
 
+//This route does work - it just only handles one file being uploaded, instead of multiple
+//It also assumes you're using the commented out middleware from up above with express.raw()
+/* 
 server.post("/files/new/:singleImage", async (req, res) => {
     let { singleImage } = req.params;
 
@@ -66,5 +69,7 @@ server.post("/files/new/:singleImage", async (req, res) => {
         })
     }
 });
+*/
+
 
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}...`));
