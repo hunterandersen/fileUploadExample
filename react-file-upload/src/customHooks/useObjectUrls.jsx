@@ -15,7 +15,6 @@ export function useObjectUrls() {
         //Set the reference to this map object so that it will persist between re-renders
         mapRef.current = map;
 
-
         return () => {
             //Clean up the created Object URLs.
             //This is really the whole point of making this entire custom Hook.
@@ -33,7 +32,7 @@ export function useObjectUrls() {
 
     /**
      * @param {File} file
-     * @returns A reference to the Object URL for the given file
+     * @returns {string | null} A reference to the Object URL for the given file
      */
     return function (file) {
         if (!mapRef.current || !file) {

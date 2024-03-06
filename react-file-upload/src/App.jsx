@@ -1,15 +1,19 @@
 import { useState } from "react";
+//Custom Hook
 import { useObjectUrls } from "./customHooks/useObjectUrls";
 import "./App.css";
 
 function App() {
-  //Will be of type FileList
+  //Will be an array filled with objects of type FileList
   const [fileData, setFileData] = useState([]);
-  const getObjectURL = useObjectUrls();
+  //This grabs that anonymous function from our custom hook
+  const getObjectUrl = useObjectUrls();
 
   function handleFileUpload(e) {
-    //Preserve the previous file selection if there was one
+    //Only update if the user has selected files, otherwise leave it.
     if (e.target.files?.length > 0) {
+      //Store the data as an array of Files, instead of directly being a FileList object
+      //The FileList object doesn't have nice Array convenience methods like .map()
       setFileData(Array.from(e.target.files));
     }
   }
@@ -19,9 +23,7 @@ function App() {
 
     if (fileData?.length > 0) {
       const formData = new FormData();
-      for (let i = 0; i < fileData.length; i++) {
-        formData.append("photo", fileData[i]);
-      }
+      fileData.forEach(file => formData.append("photo", file));
       
       fetch(`http://localhost:5555/files/new/images`, {
         body: formData,
@@ -53,6 +55,7 @@ function App() {
           type="file"
           name="fileUpload"
           id="fileUpload"
+          accept="image/*"
           multiple
           onChange={handleFileUpload}
           files={fileData}
@@ -62,7 +65,7 @@ function App() {
           {fileData.map((file, index) => {
             return (
               <li key={index}>
-                <img src={getObjectURL(file)} alt={fileData[index].name} />
+                <img src={getObjectUrl(file)} alt={fileData[index].name} />
               </li>
             );
           })}
