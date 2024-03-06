@@ -3,25 +3,22 @@ import "./App.css";
 
 function App() {
   //Will be of type FileList
-  const [files, setFiles] = useState([]);
+  const [fileData, setFileData] = useState([]);
 
   function handleFileUpload(e) {
     //Preserve the previous file selection if there was one
-    if (e.target.files.length == 0 && files?.length > 0) {
-      e.target.files = files;
-    } else {
-      //The File Interface on MDN
-      setFiles(e.target.files);
+    if (e.target.files?.length > 0) {
+      setFileData(e.target.files);
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (files?.length > 0) {
+    if (fileData?.length > 0) {
       const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append("photo", files[i]);
+      for (let i = 0; i < fileData.length; i++) {
+        formData.append("photo", fileData[i]);
       }
       
       fetch(`http://localhost:5555/files/new/images`, {
@@ -37,10 +34,10 @@ function App() {
 
   //Derived State -- Efficiency could be improved with a memo, or more robust update that clears previous ObjectURLs
   let fileArr = [];
-  if (files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
+  if (fileData.length > 0) {
+    for (let i = 0; i < fileData.length; i++) {
       //These URLs should be released after they are no longer being used
-      fileArr.push(URL.createObjectURL(files[i]));
+      fileArr.push(URL.createObjectURL(fileData[i]));
     }
   }
 
@@ -54,13 +51,14 @@ function App() {
           id="fileUpload"
           multiple
           onChange={handleFileUpload}
+          files={fileData}
         />
         <button type="submit">Submit Selected Files</button>
         <ul className="fileList">
           {fileArr.map((file, index) => {
             return (
               <li key={index}>
-                <img src={file} alt={files[index].name} />
+                <img src={file} alt={fileData[index].name} />
               </li>
             );
           })}
